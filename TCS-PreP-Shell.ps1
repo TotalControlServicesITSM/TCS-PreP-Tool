@@ -22,8 +22,8 @@ Write-Host ""
 
 # Download required local resources
 Import-Module BitsTransfer
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
 Add-Type -Assembly System.Drawing
 $bimage = [System.Drawing.Image]::FromFile("./trekimage.jpg")
 Add-Type -Assembly System.Drawing
@@ -418,7 +418,7 @@ Start-Sleep -Seconds 2
 
 Write-Host "Installing DotNetFx3. Please wait..."
     $ResultText.text = "Installing DotNetFx3. Please wait..."
-    Start-BitsTransfer -Source "https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/Packages/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
+    Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/Packages/Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab" -Destination Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab
     Start-Sleep -Seconds 2
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /LimitAccess /Source:./
 

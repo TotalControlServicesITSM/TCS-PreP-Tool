@@ -1,9 +1,9 @@
 ## TCS Machine Preparation Tool ##
-![image](https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/refs/heads/main/tcsimage.jpg)
+![image](https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/refs/heads/main/tcsimage.jpg)
 
 **Current Ver - v25.08**
 
-Use batchfile [TCS-PreP-Load.bat](https://github.com/carlhopkins/TCS-PreP-Tool/releases/download/Loader/TCS-PreP-Load.bat) under [Releases](https://github.com/carlhopkins/TCS-PreP-Tool/releases) to launch utility directly, you do not need to clone or download this repo.
+Use batchfile [TCS-PreP-Load.bat](https://github.com/TotalControlServicesITSM/TCS-PreP-Tool/releases/download/Loader/TCS-PreP-Load.bat) under [Releases](https://github.com/TotalControlServicesITSM/TCS-PreP-Tool/releases) to launch utility directly, you do not need to clone or download this repo.
 
 or...
 
