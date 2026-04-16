@@ -1,6 +1,6 @@
 # TCS Machine Preparation Tool - v25.08 - Copyright (c) 2025 Carl Hopkins
 
-# Fixes server certificate mismatch error
+# Bypasses server certificate mismatch error
 winget settings --enable BypassCertificatePinningForMicrosoftStore
 
 Add-Type -AssemblyName System.Windows.Forms
