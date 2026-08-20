@@ -1,4 +1,4 @@
-# TCS Machine Preparation Tool - v25.08 - Copyright (c) 2025 Carl Hopkins
+# TCS Machine Preparation Tool - v26.08 - Copyright (c) 2025 Carl Hopkins
 
 # Bypasses server certificate mismatch error
 winget settings --enable BypassCertificatePinningForMicrosoftStore
@@ -17,7 +17,7 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 # Init
 Write-Host "+===================================================+"
-Write-Host ".              TCS PreP Shell - v25.08              ."
+Write-Host ".              TCS PreP Shell - v26.08              ."
 Write-Host "+===================================================+"
 Write-Host ""
 Write-Host "Loading, please wait..."
@@ -27,6 +27,7 @@ Write-Host ""
 Import-Module BitsTransfer
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
+Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/Packages/tcsnetsh.xml" -Destination tcsnetsh.xml
 Add-Type -Assembly System.Drawing
 $bimage = [System.Drawing.Image]::FromFile("./trekimage.jpg")
 Add-Type -Assembly System.Drawing
@@ -210,6 +211,11 @@ Write-Host "Enabling F8 boot menu options..."
 Write-Host "Disabling Hibernation..."
     Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Session Manager\Power" -Name "HibernteEnabled" -Type Dword -Value 0
 
+Write-Host "Setting AC Timeout defaults"
+    powercfg /change monitor-timeout-ac 0
+    powercfg /change standby-timeout-ac 0
+    #powercfg /change disk-timeout-ac 0 not sure this is worthwhile for flash since on pci bus etc...
+
 Write-Host "Hiding People icon..."
     If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People")) {
         New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" | Out-Null
@@ -225,6 +231,14 @@ Write-Host "Disable Meet Now button"
         New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Force | Out-Null
     }
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1
+
+Write-Host "Setting up Wireless access"
+    netsh wlan add profile filename="./tcsnetsh.xml"
+    netsh wlan connect name=TCS_WIRELESS
+
+Write-Host "Enabling Remote Desktop Services"
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
 # Remove default Windows Bloatware Pre-installed Apps 
 Write-Host "Removing Bloatware"
@@ -245,7 +259,7 @@ $Bloatware = @(
     "*Royal Revolt*"
     "*Sway*"
     "*Speed Test*"
-    "*Dolby*"
+    "SpeedTest*"
     "*Viber*"
     "*ACGMediaPlayer*"
     "*Netflix*"
@@ -288,7 +302,6 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 })
 
 # Winget Utilities Install Routine
-# Please see MANIFEST.md for current list of apps deployed by this method
 $wingetapps.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
@@ -296,7 +309,7 @@ Write-Host "Installation in Progress..."
 # Pause to init
 Start-Sleep -Seconds 2
 
-# TCS ESSENTIAL UTILITIES
+# TCS UTILITIES
 
 # 7-Zip Compression Tool
 Write-Host "Installing 7-Zip Compression Tool"
@@ -319,29 +332,12 @@ Write-Host "Installing PDF reDirect"
     if($?) { Write-Host "Installed PDF reDirect" }
     $ResultText.text = "`r`n" + "Finished Installing PDF reDirect" + "`r`n" + "`r`n" + "Ready for Next Task"
 
-# TCS STANDARD APPLICATIONS
-
-# Foxit PDF Reader
-# Note: no longer functioning?
-#Write-Host "Installing Foxit PDF Reader"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing Foxit PDF Reader... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id Foxit.FoxitReader | Out-Host
-#    if($?) { Write-Host "Installed Foxit PDF Reader" }
-#    $ResultText.text = "`r`n" + "Finished Installing Foxit PDF Reader" + "`r`n" + "`r`n" + "Ready for Next Task"
-
 # Notepad++
 Write-Host "Installing Notepad++"
     $ResultText.text = "`r`n" +"`r`n" + "Installing Notepad++... Please Wait" 
     winget install -e --accept-source-agreements --accept-package-agreements --id Notepad++.Notepad++ | Out-Host
     if($?) { Write-Host "Installed Notepad++" }
     $ResultText.text = "`r`n" + "Finished Installing Notepad++" + "`r`n" + "`r`n" + "Ready for Next Task"
-
-# Draw Dot Io
-#Write-Host "Installing Draw Dot Io"
-#    $ResultText.text = "`r`n" +"`r`n" + "Installing Draw Dot Io... Please Wait" 
-#    winget install -e --accept-source-agreements --accept-package-agreements --id JGraph.Draw | Out-Host
-#    if($?) { Write-Host "Installed Draw Dot Io" }
-#    $ResultText.text = "`r`n" + "Finished Installing Draw Dot Io" + "`r`n" + "`r`n" + "Ready for Next Task"
 
 # Advanced IP Scanner
 Write-Host "Installing Advanced IP Scanner"
@@ -350,7 +346,7 @@ Write-Host "Installing Advanced IP Scanner"
     if($?) { Write-Host "Installed Advanced IP Scanner" }
     $ResultText.text = "`r`n" + "Finished Installing Advanced IP Scanner" + "`r`n" + "`r`n" + "Ready for Next Task"
 
-# TCS CLIENT APPLICATIONS
+# TCS APPLICATIONS
 
 # Microsoft Office 365 Apps
 Write-Host "Installing Microsoft Office 365 Apps"
