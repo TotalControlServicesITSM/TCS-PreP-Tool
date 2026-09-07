@@ -9,7 +9,7 @@ or...
 
 Alternatively you can call script directly within Powershell (elevated) using the below :- 
 
-<code>iwr -useb https://raw.githubusercontent.com/carlhopkins/TCS-PreP-Tool/main/TCS-PreP-Shell.ps1 | iex</code>
+<code>iwr -useb https://github.com/TotalControlServicesITSM/TCS-PreP-Tool/main/TCS-PreP-Shell.ps1 | iex</code>
 
 Note:
 

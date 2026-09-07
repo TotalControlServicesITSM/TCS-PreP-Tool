@@ -27,7 +27,7 @@ Write-Host ""
 Import-Module BitsTransfer
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/trekimage.jpg" -Destination trekimage.jpg
 Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/tcsimage.jpg" -Destination tcsimage.jpg
-Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/Packages/tcsnetsh.xml" -Destination tcsnetsh.xml
+#Start-BitsTransfer -Source "https://raw.githubusercontent.com/TotalControlServicesITSM/TCS-PreP-Tool/main/Packages/tcsnetsh.xml" -Destination tcsnetsh.xml
 Add-Type -Assembly System.Drawing
 $bimage = [System.Drawing.Image]::FromFile("./trekimage.jpg")
 Add-Type -Assembly System.Drawing
@@ -52,7 +52,7 @@ else{
 # GUI Specs
 $Form                         = New-Object system.Windows.Forms.Form
 $Form.ClientSize              = New-Object System.Drawing.Point(780,780)
-$Form.text                    = "TCS Machine Preparation Tool - v25.08"
+$Form.text                    = "TCS Machine Preparation Tool - v26.08"
 $Form.StartPosition           = "CenterScreen"
 $Form.TopMost                 = $false
 $Form.BackColor               = [System.Drawing.ColorTranslator]::FromHtml("#e9e9e9")
@@ -232,9 +232,9 @@ Write-Host "Disable Meet Now button"
     }
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-Write-Host "Setting up Wireless access"
-    netsh wlan add profile filename="./tcsnetsh.xml"
-    netsh wlan connect name=TCS_WIRELESS
+# Write-Host "Setting up Wireless access" - doesnt work if AP isnt already associated, needs revisiting
+#    netsh wlan add profile filename="./tcsnetsh.xml"
+#    netsh wlan connect name=TCS_WIRELESS
 
 Write-Host "Enabling Remote Desktop Services"
     Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
@@ -383,7 +383,6 @@ Write-Host "TCS PreP Tool Ready...Please select another action or reboot your sy
 })
 
 # DISM Install Routine (online version)
-# Please see MANIFEST.md for current list of apps deployed by this method
 $dismonline.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
