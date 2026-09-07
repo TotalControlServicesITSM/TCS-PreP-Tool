@@ -163,8 +163,8 @@ $ResultText.text = "TCS PreP Tool Ready...Please select action!"
 
 # Start automated cleanup processes and apply system tweaks 
 $warptweaks.Add_Click({
-Write-Host "Cleanup in Progress..."
-    $ResultText.text = "Cleanup in Progress..."
+Write-Host "Operations in Progress..."
+    $ResultText.text = "Operations in Progress..."
 
 # Pause to init
 Start-Sleep -Seconds 2
@@ -232,16 +232,38 @@ Write-Host "Disable Meet Now button"
     }
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAMeetNow" -Type DWord -Value 1
 
-# Write-Host "Setting up Wireless access" - doesnt work if AP isnt already associated, needs revisiting
-#    netsh wlan add profile filename="./tcsnetsh.xml"
-#    netsh wlan connect name=TCS_WIRELESS
-
 Write-Host "Enabling Remote Desktop Services"
     Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
+# -----------------------------------------------------------------------------------------------------
+# Setup default wireless connection (doesnt work if AP isnt already associated, needs revisiting)  
+#Write-Host "Setting up Wireless access"
+#    netsh wlan add profile filename="./tcsnetsh.xml"
+#    netsh wlan connect name=TCS_WIRELESS
+# -----------------------------------------------------------------------------------------------------
+# Set default homepage within Microsoft Edge to TCS HUB (commented out, as not yet tested!)
+#Write-Host "Setting default homepage in Microsoft Edge"
+#    $HomePageUrl = "https://totalcontroluk.sharepoint.com/sites/TCSHRPortal/SitePages/human-resource-home.aspx"
+#    $EdgePolicyPath = "HKCU:\Software\Policies\Microsoft\Edge"
+#    $StartupUrlsPath = "HKCU:\Software\Policies\Microsoft\Edge\RestoreOnStartupURLs"
+# Ensure the base Edge policy key exists
+#    if (-not (Test-Path $EdgePolicyPath)) {
+#    New-Item -Path $EdgePolicyPath -Force | Out-Null
+#    }
+# Set Edge to open a specific list of URLs on startup (Value 4)
+#    New-ItemProperty -Path $EdgePolicyPath -Name "RestoreOnStartup" -Value 4 -PropertyType DWORD -Force | Out-Null
+# Ensure the RestoreOnStartupURLs key exists
+#    if (-not (Test-Path $StartupUrlsPath)) {
+#    New-Item -Path $StartupUrlsPath -Force | Out-Null
+#    }
+# Set the primary homepage URL
+#    New-ItemProperty -Path $StartupUrlsPath -Name "1" -Value $HomePageUrl -PropertyType String -Force | Out-Null
+# ----------------------------------------------------------------------------------------------------- 
+
 # Remove default Windows Bloatware Pre-installed Apps 
-Write-Host "Removing Bloatware"
+Write-Host "Removing Bloatware..."
+    $ResultText.text = "Removing Bloatware..."
 $Bloatware = @(
 # Add sponsored/featured apps to remove in the "*AppName*" format
     "*EclipseManager*"
@@ -259,7 +281,7 @@ $Bloatware = @(
     "*Royal Revolt*"
     "*Sway*"
     "*Speed Test*"
-    "SpeedTest*"
+    "*SpeedTest*"
     "*Viber*"
     "*ACGMediaPlayer*"
     "*Netflix*"
@@ -273,14 +295,19 @@ $Bloatware = @(
     "*TikTok*"
     "*Whatsapp*"
     "*WhatsApp*"
-    "SpotifyAB.SpotifyMusic"
-    "Disney.37853FC22B2CE"
+    "*SpotifyAB*"
     "*Spotify*"
     "*Minecraft*"
-    "*Royal Revolt*"
-    "*Sway*"
-    "*Speed Test*"
     "*Disney*"
+    "MirametrixInc.GlancebyMirametrix"
+    "RealtimeboardInc.RealtimeBoard"
+    "SpotifyAB.SpotifyMusic"
+    "5A894077.McAfeeSecurity"
+    "5A894077.McAfeeSecurity_2.1.27.0_x64__wafk5atnkzcwy"
+    "Adobe Creative Cloud All Apps 2-month membership"
+    "McAfeeWPSSparsePackage_0j6k21vdgrmfw"
+    "*Slack*"
+    
 )
     foreach ($Bloat in $Bloatware) {
         Get-AppxPackage -Name $Bloat| Remove-AppxPackage
@@ -289,15 +316,15 @@ $Bloatware = @(
         $ResultText.text = "Trying to remove $Bloat..."
     }
 
-Write-Host "Cleanup complete! Please wait..."
-    $ResultText.text = "Cleanup complete! Please wait..."
+Write-Host "Operations complete! Please wait..."
+    $ResultText.text = "Operations complete! Please wait..."
 
 # Pause to init
 Start-Sleep -Seconds 2
 
 # End subroutine
-Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
-    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+Write-Host "Please select another action or reboot your system NOW!"
+    $ResultText.text = "Please select another action or reboot your system NOW!"
 
 })
 
@@ -362,6 +389,7 @@ Write-Host "Installing WatchGuard Mobile VPN with SSL client"
     if($?) { Write-Host "Installed WatchGuard Mobile VPN with SSL client" }
     $ResultText.text = "`r`n" + "Finished Installing WatchGuard Mobile VPN with SSL client" + "`r`n" + "`r`n" + "Ready for Next Task"
 
+# -----------------------------------------------------------------------------------------------------
 # WINGET MANIFEST TEMPLATE - COPY BELOW TO USE
 # APP NAME
 #Write-Host "Installing APPNAME"
@@ -369,6 +397,7 @@ Write-Host "Installing WatchGuard Mobile VPN with SSL client"
 #    winget install -e --accept-source-agreements --accept-package-agreements --id APP.LINK | Out-Host
 #    if($?) { Write-Host "Installed APPNAME" }
 #    $ResultText.text = "`r`n" + "Finished Installing APPNAME" + "`r`n" + "`r`n" + "Ready for Next Task"
+# -----------------------------------------------------------------------------------------------------
 
 Write-Host "Installation complete! Please wait..."
     $ResultText.text = "Installation complete! Please wait..."
@@ -377,8 +406,8 @@ Write-Host "Installation complete! Please wait..."
 Start-Sleep -Seconds 2
 
 # End subroutine
-Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
-    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+Write-Host "Please select another action or reboot your system NOW!"
+    $ResultText.text = "Please select another action or reboot your system NOW!"
 
 })
 
@@ -400,13 +429,12 @@ Write-Host "Installing DotNetFx3. Please wait..."
 Start-Sleep -Seconds 2
 
 # End subroutine
-Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
-    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+Write-Host "Please select another action or reboot your system NOW!"
+    $ResultText.text = "Please select another action or reboot your system NOW!"
 
 })
 
 # DISM Install Routine (offline version)
-# Please see MANIFEST.md for current list of apps deployed by this method
 $dismoffline.Add_Click({
 Write-Host "Installation in Progress..."
     $ResultText.text = "Installation in Progress..."
@@ -424,8 +452,8 @@ Write-Host "Installing DotNetFx3. Please wait..."
 Start-Sleep -Seconds 2
 
 # End subroutine
-Write-Host "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
-    $ResultText.text = "TCS PreP Tool Ready...Please select another action or reboot your system NOW!"
+Write-Host "Please select another action or reboot your system NOW!"
+    $ResultText.text = "Please select another action or reboot your system NOW!"
 
 })
 
